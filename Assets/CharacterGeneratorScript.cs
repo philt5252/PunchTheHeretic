@@ -7,20 +7,11 @@ using System.Collections;
 
 public class CharacterGeneratorScript : MonoBehaviour
 {
+    private Object currentCharacter;
 
-    public GameObject[] Characters;
-    public float MinTime = 1f;
-    public float MaxTime = 3f;
-
-    private float currentTimeSpan;
-
-    private Stopwatch stopwatch = new Stopwatch();
-    private GameObject nextCharacter;
     // Use this for initialization
     private void Start()
     {
-        stopwatch.Start();
-        UpdateAll();
     }
 
     // Update is called once per frame
@@ -31,30 +22,17 @@ public class CharacterGeneratorScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (stopwatch.ElapsedMilliseconds > currentTimeSpan*1000)
-        {
-            stopwatch.Reset();
-            stopwatch.Start();
 
-            Instantiate(nextCharacter, transform.position, Quaternion.identity);
-
-            UpdateAll();
-        }
     }
 
-    private void UpdateCurrentTimeSpan()
+    public void CreateCharacter(GameObject character)
     {
-        currentTimeSpan = Random.Range(MinTime, MaxTime);
+        currentCharacter = Instantiate(character, this.transform.position, Quaternion.identity);
     }
 
-    private void UpdateNextCharacter()
+    public bool HasCharacter()
     {
-        nextCharacter = Characters[Random.Range(0, Characters.Length)];
+        return currentCharacter != null;
     }
 
-    private void UpdateAll()
-    {
-        UpdateCurrentTimeSpan();
-        UpdateNextCharacter();
-    }
 }
