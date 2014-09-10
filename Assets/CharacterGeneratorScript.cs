@@ -1,13 +1,16 @@
 ﻿
+using System;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Timers;
+using Assets;
 using UnityEngine;
 using System.Collections;
+using Object = UnityEngine.Object;
 
 public class CharacterGeneratorScript : MonoBehaviour
 {
-    private Object currentCharacter;
+    private GameObject currentCharacter;
 
     // Use this for initialization
     private void Start()
@@ -25,9 +28,11 @@ public class CharacterGeneratorScript : MonoBehaviour
 
     }
 
-    public void CreateCharacter(GameObject character)
+    public CharacterControlScript CreateCharacter(GameObject character)
     {
-        currentCharacter = Instantiate(character, this.transform.position, Quaternion.identity);
+        currentCharacter = Instantiate(character, this.transform.position, Quaternion.identity) as GameObject;
+
+        return currentCharacter.GetComponent<CharacterControlScript>();
     }
 
     public bool HasCharacter()
