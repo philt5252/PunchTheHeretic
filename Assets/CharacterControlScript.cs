@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Assets
 {
@@ -35,7 +36,18 @@ namespace Assets
 
         void OnMouseDown()
         {
+            stopwatch.Stop();
             OnCharacterPunched();
+            Animator animator = this.GetComponent<Animator>();
+            //animator.animation.Play("HereticPunched");
+            animator.Play("HereticPunched");
+
+            //this.animation.Play("HereticPunched");
+            //
+        }
+
+        public void DestroyHeretic()
+        {
             Destroy(this.gameObject);
         }
 
