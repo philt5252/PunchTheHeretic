@@ -9,8 +9,6 @@ namespace Assets
     {
         public int Points;
 
-        public event EventHandler CharacterPunched;
-
         public float Lifetime = 6f;
 
         private Stopwatch stopwatch = new Stopwatch();
@@ -37,13 +35,10 @@ namespace Assets
         void OnMouseDown()
         {
             stopwatch.Stop();
-            OnCharacterPunched();
+
             Animator animator = this.GetComponent<Animator>();
-            //animator.animation.Play("HereticPunched");
             animator.Play("HereticPunched");
 
-            //this.animation.Play("HereticPunched");
-            //
         }
 
         public void DestroyHeretic()
@@ -51,10 +46,5 @@ namespace Assets
             Destroy(this.gameObject);
         }
 
-        void OnCharacterPunched()
-        {
-            if (CharacterPunched != null)
-                CharacterPunched(this, null);
-        }
     }
 }
