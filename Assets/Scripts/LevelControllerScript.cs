@@ -66,6 +66,16 @@ public class LevelControllerScript : MonoBehaviour
         CharacterControlScript character = selectedGenerator.CreateCharacter(selectedCharacter);
 
         character.CharacterPunched += CharacterOnCharacterPunched;
+        character.CharacterSurvived += CharacterOnCharacterSurvived;
+    }
+
+    private void CharacterOnCharacterSurvived(object sender, EventArgs eventArgs)
+    {
+        CharacterControlScript characterControlScript = sender as CharacterControlScript;
+
+        characterControlScript.CharacterSurvived -= CharacterOnCharacterSurvived;
+
+        scoreContoller.score += characterControlScript.PointsSurvived;
     }
 
     private void CharacterOnCharacterPunched(object sender, EventArgs eventArgs)
@@ -74,7 +84,7 @@ public class LevelControllerScript : MonoBehaviour
 
         characterControlScript.CharacterPunched -= CharacterOnCharacterPunched;
 
-        scoreContoller.score += characterControlScript.Points;
+        scoreContoller.score += characterControlScript.PointsPunched;
     }
 
     private void UpdateCurrentTimeSpan()
