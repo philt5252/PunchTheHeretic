@@ -11,6 +11,7 @@ public class LevelControllerScript : MonoBehaviour
     public ScoreController scoreContoller;
     public CharacterGeneratorScript[] CharacterGenerators;
     public GameObject[] Characters;
+    public int[] CharacterWeights;
 
     public float MinTime = 0.5f;
     public float MaxTime = 2f;
@@ -18,11 +19,12 @@ public class LevelControllerScript : MonoBehaviour
     private Stopwatch stopwatch = new Stopwatch();
     private float currentTimeSpan;
 
-    private int score = 0;
+    private int characterWeightTotal;
 
     // Use this for initialization
     void Start()
     {
+        characterWeightTotal = CharacterWeights.Sum();
         stopwatch.Start();
     }
 
@@ -36,11 +38,6 @@ public class LevelControllerScript : MonoBehaviour
     {
         if (stopwatch.ElapsedMilliseconds > currentTimeSpan * 1000)
         {
-
-
-            //Instantiate(nextCharacter, transform.position, Quaternion.identity);
-
-            //UpdateAll();
             CreateCharacter();
 
             UpdateCurrentTimeSpan();
@@ -58,7 +55,17 @@ public class LevelControllerScript : MonoBehaviour
             return;
 
         int generatorIndex = Random.Range(0, generators.Length);
-        int characterIndex = Random.Range(0, Characters.Length);
+        int characterNum = Random.Range(0, characterWeightTotal);
+        int characterIndex = 0;
+
+        for (int i = 0; i < CharacterWeights.Length; i++)
+        {
+            if (characterNum < CharacterWeights.Take(i + 1).Sum())
+            {
+                characterIndex = i;
+                break;
+            }
+        }
 
         CharacterGeneratorScript selectedGenerator = generators[generatorIndex];
         GameObject selectedCharacter = Characters[characterIndex];
