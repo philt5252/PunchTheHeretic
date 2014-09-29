@@ -49,12 +49,13 @@ public class LevelControllerScript : MonoBehaviour
 
     private void CreateCharacter()
     {
-        CharacterGeneratorScript[] generators = CharacterGenerators.Where(g => !g.HasCharacter()).ToArray();
+        
 
-        if (generators.Length == 0)
+        var selectedGenerator = SelectGenerator();
+
+        if (selectedGenerator == null)
             return;
 
-        int generatorIndex = Random.Range(0, generators.Length);
         int characterNum = Random.Range(0, characterWeightTotal);
         int characterIndex = 0;
 
@@ -67,13 +68,25 @@ public class LevelControllerScript : MonoBehaviour
             }
         }
 
-        CharacterGeneratorScript selectedGenerator = generators[generatorIndex];
+        
         GameObject selectedCharacter = Characters[characterIndex];
 
         CharacterControlScript character = selectedGenerator.CreateCharacter(selectedCharacter);
 
         character.CharacterPunched += CharacterOnCharacterPunched;
         character.CharacterSurvived += CharacterOnCharacterSurvived;
+    }
+
+    private CharacterGeneratorScript SelectGenerator()
+    {
+        CharacterGeneratorScript[] generators = CharacterGenerators.Where(g => !g.HasCharacter()).ToArray();
+
+        if (generators.Length == 0)
+            return null;
+
+        int generatorIndex = Random.Range(0, generators.Length);
+        CharacterGeneratorScript selectedGenerator = generators[generatorIndex];
+        return selectedGenerator;
     }
 
     private void CharacterOnCharacterSurvived(object sender, EventArgs eventArgs)
