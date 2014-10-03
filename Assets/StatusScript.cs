@@ -19,4 +19,12 @@ public class StatusScript : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(5, 5, 100, 50), "Test"))
+        {
+            Application.LoadLevel("Level" +(GlobalData.CurrentLevel+1));
+        }
+    }
 }
