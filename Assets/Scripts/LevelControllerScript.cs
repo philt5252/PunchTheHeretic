@@ -14,6 +14,7 @@ public class LevelControllerScript : MonoBehaviour
     public GameObject[] Characters;
     public int[] CharacterWeights;
 
+    public int TargetScore=25;
     public int ConsecutiveHereticsForBonusTime = 10;
     public int BonusTime = 5;
     public float LevelTime = 60;
@@ -48,6 +49,11 @@ public class LevelControllerScript : MonoBehaviour
         if (LevelTime <= 0)
         {
             stopwatch.Stop();
+
+            GlobalData.CurrentLevel = 1;
+            GlobalData.Score = scoreContoller.score;
+            GlobalData.TargetStore = TargetScore;
+
             Application.LoadLevel("PostLevel");
             return;
         }
