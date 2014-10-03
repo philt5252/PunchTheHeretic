@@ -9,9 +9,14 @@ using Random = UnityEngine.Random;
 public class LevelControllerScript : MonoBehaviour
 {
     public ScoreController scoreContoller;
+    public TimerController timerController;
     public CharacterGeneratorScript[] CharacterGenerators;
     public GameObject[] Characters;
     public int[] CharacterWeights;
+
+    public int ConsecutiveHereticsForBonusTime = 10;
+    public int BonusTime = 5;
+    public float LevelTime = 60;
 
     public float MinTime = 0.5f;
     public float MaxTime = 2f;
@@ -20,10 +25,12 @@ public class LevelControllerScript : MonoBehaviour
     private float currentTimeSpan;
 
     private int characterWeightTotal;
+    private int currentConsecutiveHeretics = 0;
 
     // Use this for initialization
     void Start()
     {
+        timerController.RemainingSeconds = LevelTime;
         characterWeightTotal = CharacterWeights.Sum();
         stopwatch.Start();
     }
@@ -31,11 +38,22 @@ public class LevelControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     void FixedUpdate()
     {
+        LevelTime -= Time.deltaTime;
+        
+        if (LevelTime <= 0)
+        {
+            stopwatch.Stop();
+            Application.LoadLevel("PostLevel");
+            return;
+        }
+
+        timerController.RemainingSeconds = LevelTime;
+
         if (stopwatch.ElapsedMilliseconds > currentTimeSpan * 1000)
         {
             CreateCharacter();
@@ -49,8 +67,6 @@ public class LevelControllerScript : MonoBehaviour
 
     private void CreateCharacter()
     {
-        
-
         var selectedGenerator = SelectGenerator();
 
         if (selectedGenerator == null)
@@ -68,7 +84,6 @@ public class LevelControllerScript : MonoBehaviour
             }
         }
 
-        
         GameObject selectedCharacter = Characters[characterIndex];
 
         CharacterControlScript character = selectedGenerator.CreateCharacter(selectedCharacter);
@@ -105,6 +120,22 @@ public class LevelControllerScript : MonoBehaviour
         characterControlScript.CharacterPunched -= CharacterOnCharacterPunched;
 
         scoreContoller.score += characterControlScript.PointsPunched;
+
+        if (characterControlScript is HereticControlScript)
+        {
+            currentConsecutiveHeretics++;
+
+            if (currentConsecutiveHeretics >= ConsecutiveHereticsForBonusTime)
+            {
+                currentConsecutiveHeretics = 0;
+
+                LevelTime += BonusTime;
+            }
+        }
+        else
+        {
+            currentConsecutiveHeretics = 0;
+        }
     }
 
     private void UpdateCurrentTimeSpan()

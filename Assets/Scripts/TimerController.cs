@@ -4,14 +4,15 @@ using System.Collections;
 
 public class TimerController : MonoBehaviour
 {
-    public TimeSpan TimeRemaining;
+    public float RemainingSeconds;
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+	{
+	    guiText.text = "Timer: " + Math.Round(RemainingSeconds,2);
 	}
 }
